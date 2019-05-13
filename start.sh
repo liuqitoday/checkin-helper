@@ -1,0 +1,1 @@
+nohup python -u main.py > checkin.log 2>&1 &
