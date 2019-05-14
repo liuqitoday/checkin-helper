@@ -1,7 +1,9 @@
 import configparser
-import smzdm
 import time
 import random
+import smzdm
+import v2ex
+
 
 
 def doCheckin():
@@ -11,7 +13,9 @@ def doCheckin():
     # SMZDM
     smzdmCookies = config_raw.get('SMZDM', 'cookies')
     smzdm.checkin(smzdmCookies)
-
+    # V2EX
+    v2exCookies = config_raw.get('V2EX', 'cookies')
+    v2ex.checkin(v2exCookies)
 
 if __name__ == "__main__":
     while True:
