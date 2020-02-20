@@ -1,6 +1,7 @@
 import requests
 import time
 import json
+import re
 import configparser
 
 # 判断页面是否登陆正确返回json
@@ -11,10 +12,10 @@ def is_json(myjson):
         return False
     return True
 
-def checkin(myCookie,myToken,myId):
+def checkin(myCookie,myId):
     callbackParam1 = 'jQuery183048434872539258844_' + str(int(round(time.time() * 1000)))
     callbackParam2 = str(int(round(time.time() * 1000)))
-    #url_signlist = https://club.lenovo.com.cn/signlist
+    url_signlist = 'https://club.lenovo.com.cn/signlist'
     url_userinfo = 'https://i.lenovo.com.cn/mcenter/getUserNameAndUserLevel.jhtml?lenovoId=' + myId + '&sts=e40e7004-4c8a-4963-8564-31271a8337d8&callback=' + callbackParam1 + '&_=' + callbackParam2
     url_checkin = 'https://club.lenovo.com.cn/sign'
     signlist = {
@@ -41,14 +42,19 @@ def checkin(myCookie,myToken,myId):
         'x-requested-with': 'XMLHttpRequest'
     }
 
-    data = {
-        '_token': myToken
-    }
-    
     #headersdata=json.dumps(headers)  # 如遇特殊符号（:authority: club.lenovo.com.cn，:scheme: https） 需字典数据转为json，需要使用json.dumps
     session = requests.session()
     response_userinfo = session.get(url_userinfo,headers=signlist,verify=True)
+    response_signlist = session.get(url_signlist,headers=signlist,verify=True)
+    token_utf8 = response_signlist.content.decode("utf-8")
+    result_token = re.search('CONFIG.token\s=\s"(\\w{40})',token_utf8) #获取随机token 
+    myToken = result_token.group()[-40:]
     result_userinfo = json.loads(response_userinfo.text.replace(callbackParam1, '')[1:-1])
+
+    data = {
+        '_token': myToken
+    }
+
     response = session.post(url_checkin, headers=headers, data=data) #json=headers 转为json解决headers特殊符号':authority': 'club.lenovo.com.cn',':path': '/sign',':scheme': 'https',
     result = response.content.decode("unicode_escape")# unicode编码转换为汉字
     try:
