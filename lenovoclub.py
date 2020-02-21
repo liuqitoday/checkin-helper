@@ -55,16 +55,21 @@ def checkin(myCookie):
     try:
         result_checkin = json.loads(result)
         if result_checkin['code'] == 100000 :
-            print('用户名:'+ str(result_userinfo['data']['username']))
-            print('用户id:'+ myId)
-            print('签到成功，本次获得' + str(result_checkin['data']['data']['add_yb_tip']))
-            print('已持续签到' + str(result_checkin['data']['signCal']['continue_count']) + '天')
-            print('已累计获得延保' + str(result_checkin['data']['signCal']['user_yanbao_score']) + '天')
+            #print('用户名:'+ str(result_userinfo['data']['username']))
+            #print('用户id:'+ myId)
+            #print('签到成功，本次获得' + str(result_checkin['data']['data']['add_yb_tip']))
+            #print('已持续签到' + str(result_checkin['data']['signCal']['continue_count']) + '天')
+            #print('已累计获得延保' + str(result_checkin['data']['signCal']['user_yanbao_score']) + '天')
+            result0 = '用户名:'+ str(result_userinfo['data']['username']) + '\n +' '用户id:'+ myId + '\n' + '签到成功，本次获得' + str(result_checkin['data']['data']['add_yb_tip']) + '\n' + '已持续签到' + str(result_checkin['data']['signCal']['continue_count']) + '天' + '\n' + '已累计获得延保' + str(result_checkin['data']['signCal']['user_yanbao_score']) + '天'
         elif result_checkin['code'] == 100001 :
-            print('用户名:'+ str(result_userinfo['data']['username']))
-            print('用户id:'+ myId)
-            print(str(result_checkin['msg']))
+            #print('用户名:'+ str(result_userinfo['data']['username']))
+            #print('用户id:'+ myId)
+            #print(str(result_checkin['msg']))
+            result0 = '用户名:'+ str(result_userinfo['data']['username']) + '\n' + '用户id:'+ myId + '\n' + str(result_checkin['msg'])
         else:
-            print ('签到失败')
+            #print ('签到失败')
+            result0 = '签到失败'
     except ValueError:
-        print ('网页打开失败，非json')
+        #print ('网页打开失败，非json')
+        result0 = '网页打开失败，非json'
+    return result0

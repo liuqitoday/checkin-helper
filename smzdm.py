@@ -25,12 +25,9 @@ def checkin(myCookie):
     usernameresult = json.loads(usernameresponse.text.replace(callbackParam3, '')[1:-1])
     #print (usernameresult)
     if result['error_code'] == 0:
-        '''
-        print('签到成功')
-        print('用户id：' + str(usernameresult['smzdm_id']))
-        print('用户名：' + str(usernameresult['nickname']))
-        print('已连续签到' + str(result['data']['checkin_num']) + "天")
-        '''
-        print('签到成功' + '\n' + '用户id：' + str(usernameresult['smzdm_id']) + '\n' + '用户名：' + str(usernameresult['nickname']) + '\n' +'已连续签到' + str(result['data']['checkin_num']) + "天")
+        #print('签到成功' + '\n' + '用户id：' + str(usernameresult['smzdm_id']) + '\n' + '用户名：' + str(usernameresult['nickname']) + '\n' +'已连续签到' + str(result['data']['checkin_num']) + "天")
+        result = '签到成功' + '\n' + '用户id：' + str(usernameresult['smzdm_id']) + '\n' + '用户名：' + str(usernameresult['nickname']) + '\n' +'已连续签到' + str(result['data']['checkin_num']) + "天"
     else:
-        print('签到失败')
+        #print('签到失败')
+        result = ('签到失败')
+    return result

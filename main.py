@@ -10,14 +10,15 @@ def doCheckin():
     config_cfg = 'config.cfg'
     config_raw = configparser.RawConfigParser()
     config_raw.read(config_cfg)
-    # 什么值得买
+    title_smzdm = '***什么值得买***\n\n'
     smzdmCookies = config_raw.get('SMZDM', 'cookies')
-    print ("什么值得买")
-    smzdm.checkin(smzdmCookies)
-    # 联想社区
+    result_smzdm =smzdm.checkin(smzdmCookies)
+    #print (result_smzdm)
+    title_lenovo = '\n\n***联想社区***\n\n'
     lenovoclubCookies = config_raw.get('LENOVOCLUB','cookies')
-    print ("联想社区")
-    lenovoclub.checkin(lenovoclubCookies)
+    #print ("联想社区")
+    result_lenovo  = lenovoclub.checkin(lenovoclubCookies)
+    return (title_smzdm + result_smzdm + title_lenovo +result_lenovo)
     # V2EX
     # v2exCookies = config_raw.get('V2EX', 'cookies')
     # v2ex.checkin(v2exCookies)
@@ -36,5 +37,4 @@ def pushWechat(desp):
     requests.post(send_url,params=params)
 
 if __name__ == "__main__":
-    doCheckin()
-#    pushWechat(doCheckin())
+    pushWechat(doCheckin())
