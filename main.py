@@ -16,9 +16,8 @@ def doCheckin():
     smzdm.checkin(smzdmCookies)
     # 联想社区
     lenovoclubCookies = config_raw.get('LENOVOCLUB','cookies')
-    lenovoclubId = config_raw.get('LENOVOCLUB','lenovoid')
     print ("联想社区")
-    lenovoclub.checkin(lenovoclubCookies,lenovoclubId)
+    lenovoclub.checkin(lenovoclubCookies)
     # V2EX
     # v2exCookies = config_raw.get('V2EX', 'cookies')
     # v2ex.checkin(v2exCookies)

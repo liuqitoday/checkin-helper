@@ -4,19 +4,8 @@ import json
 import re
 import configparser
 
-# 判断页面是否登陆正确返回json
-def is_json(myjson):
-    try:
-        json_object = json.loads(myjson)
-    except ValueError:
-        return False
-    return True
-
-def checkin(myCookie,myId):
-    callbackParam1 = 'jQuery183048434872539258844_' + str(int(round(time.time() * 1000)))
-    callbackParam2 = str(int(round(time.time() * 1000)))
+def checkin(myCookie):
     url_signlist = 'https://club.lenovo.com.cn/signlist'
-    url_userinfo = 'https://i.lenovo.com.cn/mcenter/getUserNameAndUserLevel.jhtml?lenovoId=' + myId + '&sts=e40e7004-4c8a-4963-8564-31271a8337d8&callback=' + callbackParam1 + '&_=' + callbackParam2
     url_checkin = 'https://club.lenovo.com.cn/sign'
     signlist = {
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
@@ -44,11 +33,17 @@ def checkin(myCookie,myId):
 
     #headersdata=json.dumps(headers)  # 如遇特殊符号（:authority: club.lenovo.com.cn，:scheme: https） 需字典数据转为json，需要使用json.dumps
     session = requests.session()
-    response_userinfo = session.get(url_userinfo,headers=signlist,verify=True)
     response_signlist = session.get(url_signlist,headers=signlist,verify=True)
     token_utf8 = response_signlist.content.decode("utf-8")
-    result_token = re.search('CONFIG.token\s=\s"(\\w{40})',token_utf8) #获取随机token 
+    result_token = re.search('CONFIG.token\s=\s"(\\w{40})',token_utf8) #获取随机token
     myToken = result_token.group()[-40:]
+    #获取用户id用于打印用户名及用户id
+    result_userid = re.search('lenovoid":(\\d{11})',token_utf8)
+    myId = result_userid.group()[-11:]
+    callbackParam1 = 'jQuery183048434872539258844_' + str(int(round(time.time() * 1000)))
+    callbackParam2 = str(int(round(time.time() * 1000)))
+    url_userinfo = 'https://i.lenovo.com.cn/mcenter/getUserNameAndUserLevel.jhtml?lenovoId=' + myId + '&sts=e40e7004-4c8a-4963-8564-31271a8337d8&callback=' + callbackParam1 + '&_=' + callbackParam2
+    response_userinfo = session.get(url_userinfo,headers=signlist,verify=True)
     result_userinfo = json.loads(response_userinfo.text.replace(callbackParam1, '')[1:-1])
 
     data = {
