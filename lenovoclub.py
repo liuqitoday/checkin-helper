@@ -54,6 +54,7 @@ def checkin(myCookie):
     result = response.content.decode("unicode_escape")# unicode编码转换为汉字
     try:
         result_checkin = json.loads(result)
+        #print (result_checkin)调试打印
         if result_checkin['code'] == 100000 :
             #print('用户名:'+ str(result_userinfo['data']['username']))
             #print('用户id:'+ myId)
