@@ -7,6 +7,7 @@ import re
 import json
 import smzdm
 import lenovoclub
+import huaweiclub
 
 #联想签到cookies含有特殊符号"，需替换后json方可loads
 def doReplace():
@@ -43,12 +44,16 @@ def loadConfig(website,usercookies):
                     continue
                 if website == "LENOVOCLUB":
                     result_lenovo = lenovoclub.checkin(cookies)
-                    print ('联想签到\n' + result_lenovo + '\n')
+                    datalist.append(result_lenovo)
                 elif website == "SMZDM":
                     result_smzdm = smzdm.checkin(cookies)
-                    print ('什么值得买签到\n' + result_smzdm + '\n')
+                    datalist.append(result_smzdm)
+                elif website == "HUAWEICLUB":
+                    result_huaweiclub = huaweiclub.checkin(cookies)
+                    datalist.append(result_huaweiclub)
                 else :
                     print ("other")
+            return (datalist)
     except ValueError as e:
         print ('config.json载入错误', e)
     except json.JSONDecodeError as e:
@@ -63,5 +68,8 @@ def pushWechat(desp):
     requests.post(send_url,params=params)
 
 if __name__ == "__main__":
-    loadConfig('LENOVOCLUB','cookies')
-    loadConfig('SMZDM','cookies')
+    lenovoclub_desp = loadConfig('LENOVOCLUB','cookies')
+    smzdz_desp  = loadConfig('SMZDM','cookies')
+    #loadConfig('HUAWEICLUB','cookies')
+    result_desp = "***联想社区***\n\n" + ''.join(lenovoclub_desp) + "***什么值得买***\n\n" + ''.join(smzdz_desp)
+    pushWechat(result_desp)

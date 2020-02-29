@@ -35,10 +35,10 @@ def checkin(myCookie):
     session = requests.session()
     response_signlist = session.get(url_signlist,headers=signlist,verify=True)
     token_utf8 = response_signlist.content.decode("utf-8")
-    result_token = re.search('CONFIG.token\s=\s"(\\w{40})',token_utf8) #获取随机token
+    result_token = re.search('CONFIG.token\s=\s"\w{40}',token_utf8) #获取随机token
     myToken = result_token.group()[-40:]
     #获取用户id用于打印用户名及用户id
-    result_userid = re.search('lenovoid":(\\d{11})',token_utf8)
+    result_userid = re.search('lenovoid":\d{11}',token_utf8)
     myId = result_userid.group()[-11:]
     callbackParam1 = 'jQuery183048434872539258844_' + str(int(round(time.time() * 1000)))
     callbackParam2 = str(int(round(time.time() * 1000)))
@@ -61,16 +61,16 @@ def checkin(myCookie):
             #print('签到成功，本次获得' + str(result_checkin['data']['data']['add_yb_tip']))
             #print('已持续签到' + str(result_checkin['data']['signCal']['continue_count']) + '天')
             #print('已累计获得延保' + str(result_checkin['data']['signCal']['user_yanbao_score']) + '天')
-            result0 = '用户名:'+ str(result_userinfo['data']['username']) + '\n +' '用户id:'+ myId + '\n' + '签到成功，本次获得' + str(result_checkin['data']['data']['add_yb_tip']) + '\n' + '已持续签到' + str(result_checkin['data']['signCal']['continue_count']) + '天' + '\n' + '已累计获得延保' + str(result_checkin['data']['signCal']['user_yanbao_score']) + '天'
+            result0 = '\n\n用户名:'+ str(result_userinfo['data']['username']) + '\n\n +' '用户id:'+ myId + '\n\n' + '签到成功，本次获得' + str(result_checkin['data']['data']['add_yb_tip']) + '\n\n' + '已持续签到' + str(result_checkin['data']['signCal']['continue_count']) + '天' + '\n\n' + '已累计获得延保' + str(result_checkin['data']['signCal']['user_yanbao_score']) + '天\n\n---\n\n'
         elif result_checkin['code'] == 100001 :
             #print('用户名:'+ str(result_userinfo['data']['username']))
             #print('用户id:'+ myId)
             #print(str(result_checkin['msg']))
-            result0 = '用户名:'+ str(result_userinfo['data']['username']) + '\n' + '用户id:'+ myId + '\n' + str(result_checkin['msg'])
+            result0 = '\n\n用户名:'+ str(result_userinfo['data']['username']) + '\n\n' + '用户id:'+ myId + '\n\n' + str(result_checkin['msg'] + '\n\n---\n\n')
         else:
             #print ('签到失败')
-            result0 = '签到失败'
+            result0 = '签到失败\n\n---\n\n'
     except ValueError:
         #print ('网页打开失败，非json')
-        result0 = '网页打开失败，非json'
+        result0 = '网页打开失败，非json\n\n---\n\n'
     return result0
