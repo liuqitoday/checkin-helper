@@ -1,5 +1,5 @@
-# Autocheckin python自动签到助手 
-感谢 [@liuqitoday](https://github.com/liuqitoday/checkin-helper) 的项目
+# checkin-helper 自动签到助手 
+部分功能来自 [@gxitm](https://github.com/gxitm/Autocheckin) 的项目。
 
 使用说明：在config.json中加入自己的cookie即可
 
