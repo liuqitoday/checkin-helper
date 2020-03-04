@@ -4,16 +4,20 @@ import time
 import requests
 import random
 import re
+import os
 import json
 import smzdm
 import lenovoclub
 import huaweiclub
+import ecloud
 
 #联想签到cookies含有特殊符号"，需替换后json方可loads
 def doReplace():
+    global path
+    path = os.path.dirname(os.path.abspath(__file__))
     try:
-        with open('config.json', mode='r' ,encoding='utf-8') as f_oldfile:
-            f_newfile = open('config_bak.json', 'w', encoding='utf-8')
+        with open(path + '/config.json', mode='r' ,encoding='utf-8') as f_oldfile:
+            f_newfile = open(path + '/config_bak.json', 'w', encoding='utf-8')
             for line in f_oldfile :
                 if 'cerpreg-passport="' in line :
                     line = re.sub(r'cerpreg-passport="','cerpreg-passport=\\"',line)
@@ -25,10 +29,10 @@ def doReplace():
         print ('config.json不存在')
 
 #配置多账户
-def loadConfig(website,usercookies):
+def loadConfig(website):
     doReplace()
     try:
-        with open('config_bak.json', 'r', encoding='utf-8') as f:
+        with open(path + '/config_bak.json', 'r', encoding='utf-8') as f:
             dict_config= json.loads(f.read())
             global sckey #获取sckey，定义severchan通道sckey为全局变量，以便pushwechat调用
             sckey = dict_config['SEVERCHAN']
@@ -38,7 +42,7 @@ def loadConfig(website,usercookies):
             for item in cookies_list:
                 i += 1
                 try:
-                    cookies = item[usercookies]
+                    cookies = item['cookies']
                 except KeyError as e:
                     print('第%d个账户实例配置出错，跳过该账户' % i, e)
                     continue
@@ -51,6 +55,11 @@ def loadConfig(website,usercookies):
                 elif website == "HUAWEICLUB":
                     result_huaweiclub = huaweiclub.checkin(cookies)
                     datalist.append(result_huaweiclub)
+                elif website == "ECLOUD" :
+                    ecloud_signature = item['signature']
+                    ecloud_sessionKey = item['sessionKey']
+                    result_ecloud = ecloud.checkin(cookies,ecloud_signature,ecloud_sessionKey)
+                    datalist.append(result_ecloud)
                 else :
                     print ("other")
             return (datalist)
@@ -68,8 +77,10 @@ def pushWechat(desp):
     requests.post(send_url,params=params)
 
 if __name__ == "__main__":
-    lenovoclub_desp = loadConfig('LENOVOCLUB','cookies')
-    smzdz_desp  = loadConfig('SMZDM','cookies')
-    #loadConfig('HUAWEICLUB','cookies')
-    result_desp = "***联想社区***\n\n" + ''.join(lenovoclub_desp) + "***什么值得买***\n\n" + ''.join(smzdz_desp)
-    pushWechat(result_desp)
+    desp_lenovoclub = loadConfig('LENOVOCLUB')
+    desp_smzdz = loadConfig('SMZDM')
+    #loadConfig('HUAWEICLUB')
+    desp_ecloud = loadConfig('ECLOUD')
+    desp = "***联想社区***\n\n" + ''.join(desp_lenovoclub) + "***什么值得买***\n\n" + ''.join(desp_smzdz) + "***天翼云盘***\n\n" + ''.join(desp_ecloud)
+    pushWechat(desp)
+    print(path)
