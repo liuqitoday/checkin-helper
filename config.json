@@ -5,12 +5,30 @@
             "cookies": ""
         },
         {
-            "cookies": "" 
+            "cookies": ""
+        },
+        {
+            "cookies": ""
         }
     ],
+    
     "SMZDM" :[
         {
             "cookies": ""
+        }
+    ],
+
+    "HUAWEICLUB":[
+        {
+            "cookies": ""
+        }
+    ],
+
+    "ECLOUD":[
+        {
+            "cookies" : "",
+            "signature" : "",
+            "sessionKey" : ""
         }
     ]
 }

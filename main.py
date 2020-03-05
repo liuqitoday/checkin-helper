@@ -83,4 +83,3 @@ if __name__ == "__main__":
     desp_ecloud = loadConfig('ECLOUD')
     desp = "***联想社区***\n\n" + ''.join(desp_lenovoclub) + "***什么值得买***\n\n" + ''.join(desp_smzdz) + "***天翼云盘***\n\n" + ''.join(desp_ecloud)
     pushWechat(desp)
-    print(path)
